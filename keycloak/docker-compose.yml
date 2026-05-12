@@ -1,0 +1,35 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: cereja-keycloak
+    command: start-dev --import-realm
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      KC_DB: mariadb
+      KC_DB_URL_HOST: __VM_DB_IP__
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: __KC_DB_PASSWORD__
+
+      KEYCLOAK_ADMIN: __KEYCLOAK_ADMIN__
+      KEYCLOAK_ADMIN_PASSWORD: __KEYCLOAK_ADMIN_PASSWORD__
+
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/certs/keycloak.crt
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/certs/keycloak.key
+      KC_HOSTNAME: keycloak.local.projetomensal.com.br
+      KC_HOSTNAME_PORT: 8443
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+    volumes:
+      - ./certs:/opt/keycloak/conf/certs:ro
+      - ./realm-cereja-export.json:/opt/keycloak/data/import/realm-cereja.json:ro
+    networks:
+      - cereja-net
+
+networks:
+  cereja-net:
+    driver: bridge

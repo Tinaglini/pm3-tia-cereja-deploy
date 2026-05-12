@@ -1,0 +1,42 @@
+services:
+  backend:
+    image: tomcat:11-jdk17
+    container_name: cereja-backend
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      # Banco de dados (MariaDB com TLS)
+      DB_URL: "jdbc:mysql://__VM3_IP__:3306/festasdb?useSSL=true&requireSSL=true&verifyServerCertificate=false&serverTimeZone=UTC&allowPublicKeyRetrieval=true"
+      DB_USERNAME: "__DB_USERNAME__"
+      DB_PASSWORD: "__DB_PASSWORD__"
+
+      # JWT customizado (login local com email/senha)
+      JWT_SECRET: "__JWT_SECRET__"
+
+      # Admin local default
+      ADMIN_EMAIL: "__ADMIN_EMAIL__"
+      ADMIN_PASSWORD: "__ADMIN_PASSWORD__"
+
+      # CORS - origens permitidas pelo frontend
+      CORS_ALLOWED_ORIGINS: "https://*.local.projetomensal.com.br,https://sistema1.net,https://sistema2.net"
+
+      # Keycloak SSO
+      KEYCLOAK_ISSUER_URI: "https://keycloak.local.projetomensal.com.br:8443/realms/cereja"
+
+      # JVM opts para Tomcat ler o truststore com a CA UNIAMERICA
+      CATALINA_OPTS: "-Djavax.net.ssl.trustStore=/etc/ssl/projetomensal/truststore.jks -Djavax.net.ssl.trustStorePassword=__TRUSTSTORE_PASSWORD__"
+    volumes:
+      - ./ROOT.war:/usr/local/tomcat/webapps/ROOT.war:ro
+      - ./server.xml:/usr/local/tomcat/conf/server.xml:ro
+      - ./ssl:/etc/ssl/projetomensal:ro
+    extra_hosts:
+      - "keycloak.local.projetomensal.com.br:__VM3_IP__"
+      - "backend.local.projetomensal.com.br:127.0.0.1"
+    networks:
+      - cereja-net
+
+networks:
+  cereja-net:
+    driver: bridge

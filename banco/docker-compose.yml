@@ -1,0 +1,24 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: cereja-mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: "__MARIADB_ROOT_PASSWORD__"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./grants.sql:/docker-entrypoint-initdb.d/02-grants.sql:ro
+      - ./mariadb-server.cnf:/etc/mysql/mariadb.conf.d/99-projetomensal.cnf:ro
+      - ./ssl:/etc/ssl/projetomensal:ro
+    networks:
+      - cereja-net
+
+volumes:
+  mariadb_data:
+
+networks:
+  cereja-net:
+    driver: bridge

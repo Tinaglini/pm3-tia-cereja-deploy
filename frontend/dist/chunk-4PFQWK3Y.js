@@ -1,0 +1,1 @@
+import{a as o}from"./chunk-CRSHPXT4.js";import"./chunk-B2ANZ4GN.js";import"./chunk-DEIOIFO7.js";import"./chunk-Z6Y5EVTZ.js";import"./chunk-NEXCONXN.js";import"./chunk-X3X7ZTQ6.js";var t=[{path:"",component:o,data:{isReadOnlyRole:!0}}];export{t as viewerTemaRoutes};

@@ -1,0 +1,18 @@
+services:
+  frontend:
+    image: nginx:alpine
+    container_name: cereja-frontend
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/ssl/projetomensal:ro
+      - ./dist:/usr/share/nginx/html:ro
+    networks:
+      - cereja-net
+
+networks:
+  cereja-net:
+    driver: bridge

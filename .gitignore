@@ -1,0 +1,8 @@
+# Certificados sensiveis (cada grupo emite o seu)
+*.key
+*.pem
+*.p12
+*.jks
+
+# Mas mantemos os .crt publicos do exemplo (sao certificados, nao chaves)
+!*.crt.example
